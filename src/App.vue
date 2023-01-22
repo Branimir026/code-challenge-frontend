@@ -1,37 +1,25 @@
 <template>
+
   <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-				<RouterLink to="/encoder">Encoder</RouterLink>
-        <RouterLink to="/login" v-if="!isLoggedIn">Login</RouterLink>
-				<RouterLink @click.prevent="logoutUser" to="" v-else>Logout</RouterLink>
-      </nav>
-    </div>
+		<navbar-comp />
   </header>
 
-  <RouterView />
+	<div class="mt-5">
+		<RouterView />
+	</div>
+
 </template>
 
 <script>
 import { RouterLink, RouterView } from 'vue-router'
 import { mapGetters, mapActions } from 'vuex';
+
+import NavbarComp from './components/NavbarComp.vue';
 export default {
-  
-  data() {
-    return {}
-  },
 
-	computed: {
-    ...mapGetters(['isLoggedIn'])
-  },
-
-  methods: {
-    ...mapActions(['login', 'logout']),
-    logoutUser() {
-      this.logout();
-    }
-  }
+	components: {
+		NavbarComp,
+	},
 }
 </script>
 
