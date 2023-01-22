@@ -6,17 +6,18 @@
 			</div>
 			<div class="card-body">
 				<form>
-					<div class="form-group">
+					<div class="form-group pb-3">
 						<label for="username">Email</label>
 						<input
 							id="email"
-							type="text"
-							placeholder="Email"
+							type="email"
+							placeholder="email@domain.com"
 							name="email"
 							v-model="email"
-							class="form-control">
+							class="form-control"
+							ref="emailInput">
 					</div>
-					<div class="form-group">
+					<div class="form-group pb-3">
 						<label for="password">Password</label>
 						<input
 							id="password"
@@ -24,9 +25,11 @@
 							placeholder="password"
 							name="password"
 							v-model="password"
-							class="form-control">
+							class="form-control"
+							min="6"
+							ref="passwordInput">
 					</div>
-					<p v-if="error">{{ error }}</p>
+					<p class="error alert alert-danger p-1" v-if="error">{{ error }}</p>
 					<button class="btn btn-primary" @click.prevent="loginUser">Login</button>
 				</form>
 			</div>
@@ -48,11 +51,30 @@ export default {
   methods: {
     ...mapActions(['login']),
     loginUser() {
-      let userData = {
+			this.error = '';
+
+			if (!this.email) {
+        this.error = 'Email is required';
+				this.$refs.emailInput.focus();
+				return;
+      } else if (!/^[^@]+@\w+(\.\w+)+\w$/.test(this.email)) {
+        this.error = 'Invalid email';
+				this.$refs.emailInput.focus();
+				return;
+      }
+
+			if (this.password.length < 6 || !/\d/.test(this.password)) {
+        this.error = 'Password should be at least 6 characters long and contain 1 number';
+				this.password = '';
+				this.$refs.passwordInput.focus();
+				return;
+      }
+
+			let userData = {
         email: this.email,
         password: this.password
       };
-			this.error = '';
+
       this.login(userData).then(res => {
 
 				if (res.status === 401) {
@@ -62,7 +84,7 @@ export default {
 				if (res.token) {
 					this.$router.push('/encoder');
 				}
-				
+
       }).catch(err => {
         console.log(err);
       })
@@ -73,7 +95,13 @@ export default {
 
 <style scoped>
 .card {
-  width: 60%;
+  width: 90%;
   padding: 0px;
+}
+
+@media (min-width: 1024px) {
+	.card {
+		width: 60%;
+	}
 }
 </style>
