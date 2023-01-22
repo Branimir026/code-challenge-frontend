@@ -6,7 +6,7 @@
 			</div>
 			<div class="card-body">
 				<form>
-					<div class="form-group">
+					<div class="form-group pb-3">
 						<label for="username">String you want to encode</label>
 						<input
 							id="string"
@@ -14,9 +14,10 @@
 							placeholder="AAABCCC"
 							name="string"
 							v-model="string"
-							class="form-control">
+							class="form-control"
+							ref="stringInput">
 					</div>
-					<p v-if="error">{{ error }}</p>
+					<p class="error alert alert-danger p-1" v-if="error">{{ error }}</p>
 					<button class="btn btn-primary" @click.prevent="encodeString">Encode</button>
 				</form>
 				<h1 v-if="encodedString">{{ encodedString }}</h1>
@@ -40,6 +41,13 @@ export default {
   methods: {
     ...mapActions(['encode']),
     encodeString() {
+
+			if (!this.string) {
+        this.error = 'String is required';
+				this.$refs.stringInput.focus();
+				return;
+      }
+
       let stringData = {
         string: this.string
       };
@@ -52,6 +60,7 @@ export default {
 					this.error = 'Something went wrong.'
 				} else {
 					this.encodedString = res.encodedString;
+					this.string = '';
 				}
 
       }).catch(err => {
@@ -64,7 +73,13 @@ export default {
 
 <style scoped>
 .card {
-  width: 60%;
+  width: 90%;
   padding: 0px;
+}
+
+@media (min-width: 1024px) {
+	.card {
+		width: 60%;
+	}
 }
 </style>
