@@ -13,9 +13,6 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/LoginView.vue'),
 			meta: {
 				requiresGuest: true
@@ -24,9 +21,6 @@ const router = createRouter({
     {
       path: '/encoder',
       name: 'encoder',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/EncoderView.vue'),
 			meta: {
 				requiresAuth: true
